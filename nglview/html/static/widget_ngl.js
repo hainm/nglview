@@ -35,10 +35,11 @@ require.config( {
 define( [
     "nbextensions/widgets/widgets/js/widget",
     "nbextensions/widgets/widgets/js/manager",
+    "jqueryui",
     "THREE", "Detector", "async", "Promise", "sprintf", "JSZip", "pako",
     "LZMA", "bzip2", "chroma", "jsfeat", "signals", "NGL", "mdsrv"
 ], function(
-    widget, manager, _THREE, _Detector, async, _Promise, _sprintf, _JSZip, pako,
+    widget, manager, $, _THREE, _Detector, async, _Promise, _sprintf, _JSZip, pako,
     _LZMA, _bzip2, chroma, _jsfeat, signals, _NGL, _NGL_mdsrv
 ){
 
@@ -47,31 +48,15 @@ define( [
     window.signals = signals;
     window.chroma = chroma;
 
-    console.log(NGL)
-    console.log(_NGL_mdsrv)
-
-    var WIDTH = 400;
-    var HEIGHT = 300;
-
     var NGLView = widget.DOMWidgetView.extend( {
 
         render: function(){
 
-            console.log( "NGLView", this )
+            // console.log( "NGLView", this )
 
             if( !Detector.webgl ) Detector.addGetWebGLMessage();
 
             NGL.init( function(){
-
-                // // init selection input
-                // this.$selection = $( "<input />" );
-                // this.$selection.val( this.model.get( "selection" ) );
-                // this.$selection.change( function(){
-                //     this.model.set( "selection", this.$selection.val() );
-                //     this.model.save();
-                // }.bind( this ) );
-                // this.$el.append( this.$selection );
-                // this.model.on( "change:selection", this.selectionChanged, this );
 
                 // init representations handling
                 this.model.on( "change:representations", this.representationsChanged, this );
@@ -87,10 +72,20 @@ define( [
                 this.stage = new NGL.Stage();
                 this.stage.setTheme( "light" );
                 this.structureComponent = undefined;
-                this.$el.append( this.stage.viewer.container );
-                this.setSize( WIDTH, HEIGHT );
+                this.$container = $( this.stage.viewer.container );
+                this.$el.append( this.$container );
+                this.$container.resizable( {
+                    resize: function( event, ui ){
+                        this.setSize( ui.size.width + "px", ui.size.height + "px" );
+                    }.bind( this )
+                } );
                 this.displayed.then( function(){
-                    this.stage.handleResize();
+                    var width = this.$el.parent().width() + "px";
+                    var height = "300px";
+                    this.setSize( width, height );
+                    this.$container.resizable(
+                        "option", "maxWidth", this.$el.parent().width()
+                    );
                 }.bind( this ) );
 
                 // init toggle fullscreen
@@ -101,15 +96,90 @@ define( [
                 // init model data
                 this.structureChanged();
 
+                // init picking handling
+                this.$pickingInfo = $( "<div></div>" )
+                    .css( "position", "absolute" )
+                    .css( "top", "5%" )
+                    .css( "left", "3%" )
+                    .css( "background-color", "white" )
+                    .css( "padding", "2px 5px 2px 5px" )
+                    .css( "opacity", "0.7" )
+                    .appendTo( this.$container );
+                this.stage.signals.onPicking.add( function( pd ){
+                    var pd2 = {};
+                    if( pd.atom ) pd2.atom = pd.atom.toJSON();
+                    if( pd.bond ) pd2.bond = pd.bond.toJSON();
+                    if( pd.instance ) pd2.instance = pd.instance;
+                    this.model.set( "picked", pd2 );
+                    this.model.save();
+                    var pickingText = "";
+                    if( pd.atom ){
+                        pickingText = "Atom: " + pd.atom.qualifiedName();
+                    }else if( pd.bond ){
+                        pickingText = "Bond: " + pd.bond.atom1.qualifiedName() + " - " + pd.bond.atom2.qualifiedName();
+                    }
+                    this.$pickingInfo.text( pickingText );
+                }, this );
+
+                // init player
+                if( this.model.get( "count" ) ){
+                    var play = function(){
+                        this.$playerButton.text( "pause" );
+                        this.playerInterval = setInterval( function(){
+                            var frame = this.model.get( "frame" ) + 1;
+                            var count = this.model.get( "count" );
+                            if( frame >= count ) frame = 0;
+                            this.model.set( "frame", frame );
+                            this.model.save();
+                        }.bind( this ), 100 );
+                    }.bind( this );
+                    var pause = function(){
+                        this.$playerButton.text( "play" );
+                        if( this.playerInterval !== undefined ){
+                            clearInterval( this.playerInterval );
+                        }
+                    }.bind( this );
+                    this.$playerButton = $( "<button>play</button>" )
+                        .css( "float", "left" )
+                        .css( "width", "55px" )
+                        .css( "opacity", "0.7" )
+                        .click( function( event ){
+                            if( this.$playerButton.text() === "play" ){
+                                play();
+                            }else if( this.$playerButton.text() === "pause" ){
+                                pause();
+                            }
+                        }.bind( this ) );
+                    this.$playerSlider = $( "<div></div>" )
+                        .css( "margin-left", "70px" )
+                        .css( "position", "relative" )
+                        .css( "bottom", "-7px" )
+                        .slider( {
+                            min: 0,
+                            max: this.model.get( "count" ) - 1,
+                            slide: function( event, ui ){
+                                pause();
+                                this.model.set( "frame", ui.value );
+                                this.model.save();
+                            }.bind( this )
+                        } );
+                    this.$player = $( "<div></div>" )
+                        .css( "position", "absolute" )
+                        .css( "bottom", "5%" )
+                        .css( "width", "94%" )
+                        .css( "margin-left", "3%" )
+                        .css( "opacity", "0.7" )
+                        .append( this.$playerButton )
+                        .append( this.$playerSlider )
+                        .appendTo( this.$container );
+                    this.model.on( "change:frame", function(){
+                        this.$playerSlider.slider( "value", this.model.get( "frame" ) );
+                    }, this );
+                }
+
             }.bind( this ) );
 
         },
-
-        // selectionChanged: function(){
-        //     var selection = this.model.get( "selection" );
-        //     this.$selection.val( selection );
-        //     this.stage.getRepresentationsByName().setSelection( selection );
-        // },
 
         representationsChanged: function(){
             var representations = this.model.get( "representations" );
@@ -130,7 +200,6 @@ define( [
                     new Blob( [ structure.data ], { type: "text/plain" } ),
                     { ext: structure.ext, defaultRepresentation: false }
                 ).then( function( component ){
-                    console.log( "MOIN", component );
                     component.centerView();
                     this.structureComponent = component;
                     this.representationsChanged();
@@ -149,8 +218,8 @@ define( [
         },
 
         setSize: function( width, height ){
-            this.stage.viewer.container.style.width = width + "px";
-            this.stage.viewer.container.style.height = height + "px";
+            this.stage.viewer.container.style.width = width;
+            this.stage.viewer.container.style.height = height;
             this.stage.handleResize();
         }
 
