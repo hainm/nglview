@@ -26,6 +26,7 @@ except ImportError:
 class Structure(object):
     def __init__( self ):
         self.ext = "pdb"
+        self.params = {}
 
     def get_structure_string( self ):
         raise NotImplementedError()
@@ -35,6 +36,7 @@ class FileStructure(Structure):
     def __init__( self, path, ext="pdb" ):
         self.path = path
         self.ext = ext
+        self.params = {}
         if not os.path.isfile( path ):
             raise IOError( "Not a file: " + path )
 
@@ -47,6 +49,7 @@ class PdbIdStructure(Structure):
     def __init__( self, pdbid ):
         self.pdbid = pdbid
         self.ext = "cif"
+        self.params = {}
 
     def get_structure_string( self ):
         url = "http://www.rcsb.org/pdb/files/" + self.pdbid + ".cif"
@@ -92,6 +95,7 @@ class MDTrajTrajectory(Trajectory, Structure):
     def __init__( self, trajectory ):
         self.trajectory = trajectory
         self.ext = "pdb"
+        self.params = {}
 
     def get_coordinates_list( self, index ):
         frame = self.trajectory[ index ].xyz * 10  # convert from nm to A
@@ -118,6 +122,8 @@ class NGLWidget(widgets.DOMWidget):
     picked = Dict(sync=True)
     frame = Int(sync=True)
     count = Int(sync=True)
+    clip = Dict(sync=True)
+    fog = Dict(sync=True)
 
     def __init__( self, structure, trajectory=None, representations=None, **kwargs ):
         super(NGLWidget, self).__init__(**kwargs)
@@ -146,7 +152,8 @@ class NGLWidget(widgets.DOMWidget):
     def set_structure( self, structure ):
         self.structure = {
             "data": structure.get_structure_string(),
-            "ext": structure.ext
+            "ext": structure.ext,
+            "params": structure.params
         }
 
     def _set_coordinates( self, index ):
@@ -161,4 +168,4 @@ class NGLWidget(widgets.DOMWidget):
 
 
 staticdir = resource_filename('nglview', os.path.join('html', 'static'))
-install_nbextension(staticdir, destination='nglview', user=True)
+install_nbextension(staticdir, destination='nglview', user=True, verbose=0)
