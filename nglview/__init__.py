@@ -134,7 +134,7 @@ class TrajectoryViewer(widgets.DOMWidget):
     def set_structure(self, structure):
         self.structure = {
             "data": structure.get_structure_string(),
-            "ext": 'pdb'
+            "ext": 'pdb',
             "params": structure.params
         }
 
