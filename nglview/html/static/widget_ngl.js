@@ -227,8 +227,6 @@ define( [
                 component.updateRepresentations( { "position": true } );
             }
 
-            // debug
-            window.alert('coordinatesChanged');
         },
 
         setSize: function( width, height ){
@@ -252,7 +250,7 @@ define( [
             this.stage.viewer.updateRotateSpeed(rotateSpeed); 
 
             // debug
-            //window.alert('updated');
+            window.alert('updated rotate_speed');
         },
 
     } );
