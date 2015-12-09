@@ -248,9 +248,6 @@ define( [
         rotateSpeedChanged: function(){
             var rotateSpeed = this.model.get( "rotate_speed" );
             this.stage.viewer.updateRotateSpeed(rotateSpeed); 
-
-            // debug
-            window.alert('updated rotate_speed');
         },
 
     } );
