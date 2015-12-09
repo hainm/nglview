@@ -155,8 +155,6 @@ class TrajectoryViewer(widgets.DOMWidget):
         _add_representation('protein', type='cartoon')
         '''
         rep = self.representations[:]
-        #rep.append({'params': {'sele': selection}, 'type':
-        #            kwd.get('type', 'line')})
         d = {'params': {'sele': selection}}
         d.update(kwd)
         rep.append(d)
