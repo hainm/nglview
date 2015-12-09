@@ -40,6 +40,7 @@ def load_file(path):
     with open(path, "r") as f:
         return Structure(text=f.read())
 
+
 def fetch_pdb(pdbid):
     '''return a Structure
     '''
@@ -92,7 +93,6 @@ class Trajectory(object):
     @property
     def n_frames(self):
         return self.xyz.shape[0]
-
 
 
 class TrajectoryViewer(widgets.DOMWidget):
@@ -149,6 +149,17 @@ class TrajectoryViewer(widgets.DOMWidget):
     def _frame_changed(self):
         self._set_coordinates(self.frame)
 
+    def _add_representation(self, selection, **kwd):
+        '''add representation.
+
+        _add_representation('protein', type='cartoon')
+        '''
+        rep = self.representations[:]
+        rep.append({'params': {'sele': selection}, 'type':
+                    kwd.get('type', 'line')})
+        # reassign representation to trigger change
+        self.representations = rep
+
 
 staticdir = resource_filename('nglview', os.path.join('html', 'static'))
-install_nbextension(staticdir, destination='nglview', user=True, verbose=0)
+install_nbextension(staticdir, destination='nglview', user=True, verbose=1)
