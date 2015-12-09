@@ -2,7 +2,7 @@
 
 An IPython widget to interactively view molecular structures and trajectories. Utilizes the embeddable [NGL Viewer](https://github.com/arose/ngl) for rendering.
 
-Very much work in progress. Please contact me (Arose) if you want to take part. Should work with Python 2 and 3. If you experience problems, please file an [issue](https://github.com/arose/nglview/issues).
+Very much work in progress. Please contact me (arose (Alexander Rose) ) if you want to take part. Should work with Python 2 and 3. If you experience problems, please file an [issue](https://github.com/arose/nglview/issues).
 
 
 Table of contents
