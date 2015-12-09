@@ -155,11 +155,14 @@ class TrajectoryViewer(widgets.DOMWidget):
         _add_representation('protein', type='cartoon')
         '''
         rep = self.representations[:]
-        rep.append({'params': {'sele': selection}, 'type':
-                    kwd.get('type', 'line')})
+        #rep.append({'params': {'sele': selection}, 'type':
+        #            kwd.get('type', 'line')})
+        d = {'params': {'sele': selection}}
+        d.update(kwd)
+        rep.append(d)
         # reassign representation to trigger change
         self.representations = rep
 
 
 staticdir = resource_filename('nglview', os.path.join('html', 'static'))
-install_nbextension(staticdir, destination='nglview', user=True, verbose=1)
+install_nbextension(staticdir, destination='nglview', user=True, verbose=0)
