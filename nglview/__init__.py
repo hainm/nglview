@@ -5,7 +5,7 @@ import os
 import warnings
 import tempfile
 import ipywidgets as widgets
-from traitlets import Unicode, Bool, Dict, List, Int
+from traitlets import Unicode, Bool, Dict, List, Int, Float
 
 from IPython.display import display, Javascript
 try:
@@ -38,7 +38,8 @@ def load_file(path):
     '''return a Structure
     '''
     with open(path, "r") as f:
-        return Structure(f.read())
+        return Structure(text=f.read())
+
 
 def fetch_pdb(pdbid):
     '''return a Structure
@@ -94,7 +95,6 @@ class Trajectory(object):
         return self.xyz.shape[0]
 
 
-
 class TrajectoryViewer(widgets.DOMWidget):
 
     # NGLWidget is a weird name (vs TrajectoryViewer) for general users.
@@ -107,6 +107,7 @@ class TrajectoryViewer(widgets.DOMWidget):
     picked = Dict(sync=True)
     frame = Int(sync=True)
     count = Int(sync=True)
+    rotate_speed = Float(sync=True)
     clip = Dict(sync=True)
     fog = Dict(sync=True)
 
@@ -147,6 +148,18 @@ class TrajectoryViewer(widgets.DOMWidget):
 
     def _frame_changed(self):
         self._set_coordinates(self.frame)
+
+    def _add_representation(self, selection, **kwd):
+        '''add representation.
+
+        _add_representation('protein', type='cartoon')
+        '''
+        rep = self.representations[:]
+        d = {'params': {'sele': selection}}
+        d.update(kwd)
+        rep.append(d)
+        # reassign representation to trigger change
+        self.representations = rep
 
 
 staticdir = resource_filename('nglview', os.path.join('html', 'static'))
