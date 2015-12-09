@@ -16,9 +16,20 @@ Table of contents
 Installation
 ============
 
-From github:
+Currently we are experimenting two different APIs, from hainm and arose repos
+
+From [arose repo] (https://github.com/arose/nglview):
+
+    git clone https://github.com/arose/nglview
+    cd nglview
+    python setup.py install
+
+From hainm repo (check [notebook] (./notebook/)):
 
     git clone https://github.com/hainm/nglview
+    cd nglview
+    python setup.py install
+
 
 
 Changelog
