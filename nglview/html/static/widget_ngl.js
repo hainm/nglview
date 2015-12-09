@@ -239,7 +239,12 @@ define( [
         fogChanged: function(){
             var fog = this.model.get( "fog" );
             this.stage.viewer.setFog( null, fog.near, fog.far );
-        }
+        },
+
+        rotationSpeedChanged: function(){
+            var rotateSpeed = this.model.get( "rotate_speed" );
+            this.stage.viewer.controls.rotateSpeed = rotateSpeed;
+        },
 
     } );
 

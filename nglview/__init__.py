@@ -5,7 +5,7 @@ import os
 import warnings
 import tempfile
 import ipywidgets as widgets
-from traitlets import Unicode, Bool, Dict, List, Int
+from traitlets import Unicode, Bool, Dict, List, Int, Float
 
 from IPython.display import display, Javascript
 try:
@@ -38,7 +38,7 @@ def load_file(path):
     '''return a Structure
     '''
     with open(path, "r") as f:
-        return Structure(f.read())
+        return Structure(text=f.read())
 
 def fetch_pdb(pdbid):
     '''return a Structure
@@ -107,6 +107,7 @@ class TrajectoryViewer(widgets.DOMWidget):
     picked = Dict(sync=True)
     frame = Int(sync=True)
     count = Int(sync=True)
+    rotate_speed = Float(sync=True)
     clip = Dict(sync=True)
     fog = Dict(sync=True)
 
