@@ -226,6 +226,8 @@ define( [
                 component.structure.updatePosition( coords );
                 component.updateRepresentations( { "position": true } );
             }
+
+            // debug
             window.alert('coordinatesChanged');
         },
 
