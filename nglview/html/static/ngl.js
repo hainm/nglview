@@ -29102,7 +29102,7 @@ NGL.Viewer.prototype = {
 
     },
 
-    update_rotate_speed : function(speed){
+    updateRotateSpeed : function(speed){
 
         this.controls.rotateSpeed = speed;
     },
