@@ -152,10 +152,23 @@ class TrajectoryViewer(widgets.DOMWidget):
     def _frame_changed(self):
         self._set_coordinates(self.frame)
 
-    def _add_representation(self, selection, type_='line', **kwd):
+    def _add_representation(self, selection='all', type_='line', **kwd):
         '''add representation.
 
-        _add_representation('protein', type='cartoon')
+        Parameters
+        ----------
+        selection : str, default 'all'
+        type_ : str, default 'line'
+            type of representation. Please check:
+            http://arose.github.io/ngl/doc/#User_manual/Usage/Molecular_representations
+        **kwd: additional arguments for type_
+
+
+        Example
+        -------
+        >>> import nglview as nv
+        >>> tv = nv.TrajectoryViewer(traj)
+        >>> tv._add_representation('protein', type_='cartoon')
         '''
         rep = self.representations[:]
         d = {'params': {'sele': selection}}
