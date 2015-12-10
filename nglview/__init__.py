@@ -109,7 +109,10 @@ class TrajectoryViewer(widgets.DOMWidget):
     count = Int(sync=True)
     rotate_speed = Float(sync=True)
     clip = Dict(sync=True)
+    clip = Dict(sync=True)
     fog = Dict(sync=True)
+
+    parameters = Dict(sync=True)
 
     def __init__(self, trajectory, representations=None, **kwargs):
         super(TrajectoryViewer, self).__init__(**kwargs)
@@ -156,7 +159,9 @@ class TrajectoryViewer(widgets.DOMWidget):
         '''
         rep = self.representations[:]
         d = {'params': {'sele': selection}}
-        d.update(kwd)
+        type_ = kwd.pop('type', 'line')
+        d['type'] = type_
+        d['params'].update(kwd)
         rep.append(d)
         # reassign representation to trigger change
         self.representations = rep
