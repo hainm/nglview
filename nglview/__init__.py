@@ -152,14 +152,13 @@ class TrajectoryViewer(widgets.DOMWidget):
     def _frame_changed(self):
         self._set_coordinates(self.frame)
 
-    def _add_representation(self, selection, **kwd):
+    def _add_representation(self, selection, type_='line', **kwd):
         '''add representation.
 
         _add_representation('protein', type='cartoon')
         '''
         rep = self.representations[:]
         d = {'params': {'sele': selection}}
-        type_ = kwd.pop('type', 'line')
         d['type'] = type_
         d['params'].update(kwd)
         rep.append(d)
