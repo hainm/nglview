@@ -77,6 +77,10 @@ define( [
                 // init rotation speed?
                 this.model.on( "change:rotate_speed", this.rotateSpeedChanged, this );
 
+                // init parameters
+                // parameters is a dict
+                this.model.on( "change:parameters", this.parametersChanged, this );
+
                 // init NGL stage
                 NGL.useWorker = false;
                 this.stage = new NGL.Stage();
@@ -248,6 +252,11 @@ define( [
         rotateSpeedChanged: function(){
             var rotateSpeed = this.model.get( "rotate_speed" );
             this.stage.viewer.controls.rotateSpeed = rotateSpeed; 
+        },
+
+        parametersChanged: function(){
+            var pars = this.model.get( "parameters" );
+            this.stage.setParameters(pars);
         },
 
     } );

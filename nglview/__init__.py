@@ -8,10 +8,7 @@ import ipywidgets as widgets
 from traitlets import Unicode, Bool, Dict, List, Int, Float
 
 from IPython.display import display, Javascript
-try:
-    from notebook.nbextensions import install_nbextension
-except ImportError:
-    from IPython.html.nbextensions import install_nbextension
+from notebook.nbextensions import install_nbextension
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -111,7 +108,6 @@ class TrajectoryViewer(widgets.DOMWidget):
     clip = Dict(sync=True)
     clip = Dict(sync=True)
     fog = Dict(sync=True)
-
     parameters = Dict(sync=True)
 
     def __init__(self, trajectory, representations=None, **kwargs):
