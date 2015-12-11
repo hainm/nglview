@@ -255,8 +255,8 @@ define( [
         },
 
         parametersChanged: function(){
-            var pars = this.model.get( "parameters" );
-            this.stage.setParameters(pars);
+            var params = this.model.get( "parameters" );
+            this.stage.setParameters(params);
         },
 
     } );
