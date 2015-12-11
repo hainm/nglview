@@ -23,6 +23,16 @@ except ImportError:
 class Structure(object):
 
     def __init__(self, text, ext='pdb', params={}):
+        '''
+
+        Examples
+        --------
+        >>> import requests
+        >>> r  = requests.get('http://www.rcsb.org/pdb/files/1L2Y.pdb')
+        >>> from nglview import Structure
+        >>> struct = Structure(r.text)
+        >>> struct.get_structure_string()
+        '''
         self._buffer = text
         self.ext = ext
         self.params = params
