@@ -6,12 +6,16 @@ Very much work in progress. Please contact me (arose (Alexander Rose) ) if you w
 Table of contents
 =================
 
+* [Note](#note)
 * [Installation](#installation)
-* [Usage](#Usage)
-* [Interface classes](#Interface classes)
+* [Usage](#usage)
 * [Changelog](#changelog)
 * [License](#license)
 
+Note
+====
+
+The API is not stable in hainm's repo.
 
 Installation
 ============
@@ -31,6 +35,10 @@ From hainm repo (check [notebook] (./notebook/)):
     python setup.py install
 
 
+Usage
+=====
+
+Please check corresponding repo (either from arose or hainm)
 
 Changelog
 =========
