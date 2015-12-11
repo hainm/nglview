@@ -106,7 +106,6 @@ class TrajectoryViewer(widgets.DOMWidget):
     count = Int(sync=True)
     rotate_speed = Float(sync=True)
     clip = Dict(sync=True)
-    clip = Dict(sync=True)
     fog = Dict(sync=True)
     parameters = Dict(sync=True)
 
@@ -148,14 +147,26 @@ class TrajectoryViewer(widgets.DOMWidget):
     def _frame_changed(self):
         self._set_coordinates(self.frame)
 
-    def _add_representation(self, selection, **kwd):
+    def _add_representation(self, selection='all', type_='line', **kwd):
         '''add representation.
 
-        _add_representation('protein', type='cartoon')
+        Parameters
+        ----------
+        selection : str, default 'all'
+        type_ : str, default 'line'
+            type of representation. Please check:
+            http://arose.github.io/ngl/doc/#User_manual/Usage/Molecular_representations
+        **kwd: additional arguments for type_
+
+
+        Example
+        -------
+        >>> import nglview as nv
+        >>> tv = nv.TrajectoryViewer(traj)
+        >>> tv._add_representation('protein', type_='cartoon')
         '''
         rep = self.representations[:]
         d = {'params': {'sele': selection}}
-        type_ = kwd.pop('type', 'line')
         d['type'] = type_
         d['params'].update(kwd)
         rep.append(d)
