@@ -38,8 +38,4 @@ if __name__ == '__main__':
         packages = [ "nglview", "nglview.html" ],
         requires = [ "ipython" ],
         install_requires = [ "ipython" ],
-        extras_require = {
-            "simpletraj": [ "simpletraj" ],
-            "mdtraj": [ "mdtraj" ]
-        }
     )
