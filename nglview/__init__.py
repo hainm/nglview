@@ -109,7 +109,6 @@ class TrajectoryViewer(widgets.DOMWidget):
     count = Int(sync=True)
     rotate_speed = Float(sync=True)
     clip = Dict(sync=True)
-    clip = Dict(sync=True)
     fog = Dict(sync=True)
 
     parameters = Dict(sync=True)
