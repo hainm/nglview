@@ -34,7 +34,7 @@ if __name__ == '__main__':
         license="MIT",
         url="https://github.com/arose/nglview",
         zip_safe=False,
-        package_data={"nglview.html": ["static/*"]},
-        packages=["nglview", "nglview.html"],
+        package_data={"nglview": ["static/*"]},
+        packages=["nglview"],
         install_requires=["ipython", 'ipywidgets', 'traitlets'],
     )
