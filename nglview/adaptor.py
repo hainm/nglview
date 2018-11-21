@@ -89,9 +89,10 @@ class SchrodingerStructure(Structure):
         self._schrodinger_structure = structure
 
     def get_structure_string(self):
+        from schrodinger.application.scisol.packages.fep.fepmae import _reorder_protein_and_water
         with tempfolder():
             pdb_fn = 'tmp.pdb'
-            self._schrodinger_structure.write(pdb_fn)
+            _reorder_protein_and_water(self._schrodinger_structure).write(pdb_fn)
             with open(pdb_fn) as fh:
                 content = fh.read()
         return content
@@ -447,3 +448,17 @@ class ASETrajectory(Trajectory, Structure):
     @property
     def n_frames(self):
         return len(self.trajectory)
+
+
+@register_backend('schrodinger')
+class SchrodingerTrajectory(SchrodingerStructure, Trajectory):
+    def __init__(self, structure, traj):
+        super(SchrodingerTrajectory, self).__init__(structure)
+        self._traj = traj
+
+    @property
+    def n_frames(self):
+        return len(self._traj)
+
+    def get_coordinates(self, index):
+        return self._traj[index].pos()
