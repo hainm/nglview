@@ -1,5 +1,3 @@
-# ngl install
+cd ../
+python setup.py install
 nglview install && nglview enable
-jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
-jupyter labextension install nglview-js-widgets@2.6.1
-# jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
