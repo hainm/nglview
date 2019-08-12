@@ -6,3 +6,4 @@ dependencies:
 - pip:
     - pytraj
     - moviepy
+    - https://github.com/hainm/nglview/archive/voila.zip
